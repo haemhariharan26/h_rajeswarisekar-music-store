@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Music Info App</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <link rel="stylesheet" href="css/style.scss" />
+  </head>
+
+  <body>
+    <div id="app">
+      <div v-if="loading" class="loader-wrapper">
+        <div class="loader"></div>
+        <p class="loading-text">Please wait...</p>
+      </div>
+      <div v-if="errorMessage && errorMessage.length > 0" class="error-message">
+        <div class="modal" v-show="errorMessage !== null">
+          <div class="modal-content">
+            <div class="modal-card-body">
+              {{ errorMessage }}
+            </div>
+            <div class="modal-button-styles">
+              <button @click="closeDetailsPage" class="button-styles">
+               Close
+             </button>
+           </div>
+          </div>
+          
+        </div>
+       
+      </div>
+
+      <!-- <div class="main"> -->
+      <!-- <div class="card-container" v-if="data.length > 0"> -->
+      <!-- header -->
+
+      <header class="site-header">
+        <div class="site-identity">
+          <h1  @click="currentPage=1">The Music Info Stores</h1>
+        </div>
+        <nav class="header">
+          <ul class="header-ul">
+            <!-- <li class="header-li">News</li>
+            <li class="header-li">Contact</li> -->
+          </ul>
+        </nav>
+      </header>
+
+      <div class="heading">
+        <h1>Welcome to  Music Info Stores</h1>
+      </div>
+      
+      <div class="main-card-continer">
+        <div class="row">
+          <div
+            class="card"
+            v-for="item in paginatedData"
+            :key="item.id"
+            @click="openDetailsPage(item.id)"
+          >
+            <div class="card-image">
+              <img :src="item.album_image" style="width: 100%" class="images" />
+            </div>
+            <div class="card-body">
+              <p class="title">{{ item.title }}</p>
+              <div class="book-details">
+                <p class="card-inner-details">By {{ item.artist_name }}</p>
+                <p class="card-inner-details">{{ item.album_date }}</p>
+                <button class="button-styles">See the info</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- </div> -->
+
+      <!-- Pagination controls -->
+      
+      <div class="pagination">
+        <button
+          @click="previousPage"
+          :disabled="currentPage === 1"
+          class="pagination-buttons"
+        >
+          Previous
+        </button>
+        <button
+          @click="nextPage"
+          :disabled="currentPage === totalPages"
+          class="pagination-buttons next-button"
+        >
+          Next
+        </button>
+        
+      </div>
+
+      <div class="modal" v-show="selectedAlbum !== null">
+        <div class="modal-content">
+          <label
+            for="modal-toggle{{selectedAlbum}}"
+            class="close-btn"
+            @click="closeDetailsPage"
+            >&times;</label
+          >
+          <p class="loading-text" v-if="!albumDetails">Please wait...</p>
+
+          <div v-else-if="albumDetails && albumDetails.length > 0">
+            <div class="modal-styles">
+              <div class="card-image">
+                <img
+                :src="albumDetails[0].album_image"
+                  style="width: 100%"
+                  class="images"
+                />
+              </div>
+              <div class="modal-card-body">
+                <p>Album name: {{ albumDetails[0]?.title }}</p>
+                <p>Album Date: {{ albumDetails[0]?.album_date }}</p>
+                <p>Singer: {{ albumDetails[0]?.name }}</p>
+                <p>Email: {{ albumDetails[0]?.email }}</p>
+                <p>Age: {{ albumDetails[0]?.age }}</p>
+              </div>
+            </div>
+
+            <div class="modal-button-styles">
+               <button @click="closeDetailsPage" class="button-styles">
+                Close
+              </button>
+            </div>  
+          </div>
+        </div>
+        </div>
+
+        <!-- 
+        <div v-show="selectedAlbum" class="popup">
+          <div v-if="loading" class="loader-wrapper">
+            <div class="loader"></div>
+            <p class="loading-text">Please wait...</p>
+          </div>
+          <p>{{albumDetails}}</p>
+          <button @click="closeDetailsPage">Close</button>
+        </div> -->
+      </div>
+
+      <!-- footer -->
+      
+      <!-- </div> -->
+    </div>
+    <script type="module" src="modules/scripts.js"></script>
+  </body>
+</html>
